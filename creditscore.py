@@ -36,7 +36,7 @@ os.system("ulimit -n 2048")
 
 BASE_PATH = os.getcwd()
 INPUT_STOCK_IDS_PATH = 'input_stock_ids.txt'
-NUM_RETRIES = 10
+NUM_RETRIES = 5
 HOME = expanduser("~")
 SAVE_PATH = HOME+"/Downloads/"
 
@@ -88,7 +88,10 @@ def json_to_row(data):
 
 def scrape_a_company(driver, id, pbar, depth=0):
     start_time = time()
-    waiter = WebDriverWait(driver, 60, ignored_exceptions=(
+		# Slow website load time of 60 sec only justified by cold start of headless Chrome browser.
+		# After retries, time needed should decrease. We don't want to wait 10 mins for requests
+		# that'll never pass. Thus, reverse exponential backoff :D
+    waiter = WebDriverWait(driver, 60/(depth+1), ignored_exceptions=(
         NoSuchElementException, StaleElementReferenceException,))
     driver.get(
         f"https://credit.zj.gov.cn/jyh/#/home/searchResult?condition={id}&type=&source=object")
@@ -101,7 +104,7 @@ def scrape_a_company(driver, id, pbar, depth=0):
         action_chain.perform()
 
         request = driver.wait_for_request(
-            '/router/api/p/creditSearchCityArchivalInfo', 30)
+            '/router/api/p/creditSearchCityArchivalInfo', 15)
         archivalInfoData = loads(request.response.body)
         company_name = archivalInfoData['data']['name']
         with open(f"{BASE_PATH}/raw_data/{company_name}.json", 'wb') as f:
