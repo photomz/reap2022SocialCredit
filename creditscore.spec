@@ -6,7 +6,7 @@ block_cipher = None
 
 a = Analysis(
     ['creditscore.py'],
-    binaries=[ ('./bin/chromedriver', 'bin') ],
+    binaries=[],
     pathex=[],
     datas=[('README.md', '.'), ('input_stock_ids.txt', '.'), ('template_headers.xlsx', '.')],
     hiddenimports=[],

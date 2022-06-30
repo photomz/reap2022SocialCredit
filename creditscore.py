@@ -26,12 +26,11 @@ DEBUG = False
 # logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-os.system("ulimit -n 1024")
+os.system("ulimit -n 2048")
 
 BASE_PATH = os.getcwd()
 INPUT_STOCK_IDS_PATH = 'input_stock_ids.txt'
 NUM_RETRIES = 10
-DRIVER_PATH = BASE_PATH+"/bin/chromedriver"
 HOME = expanduser("~")
 SAVE_PATH = HOME+"/Downloads/"
 
@@ -50,8 +49,7 @@ def make_new_driver():
 		chrome_options.add_argument("--disable-extensions")
 		chrome_options.add_argument('--disable-dev-shm-usage')
 
-		driver = webdriver.Chrome(DRIVER_PATH,
-				options=chrome_options, desired_capabilities=chrome_capabilities, seleniumwire_options=wire_options)
+		driver = webdriver.Chrome(options=chrome_options, desired_capabilities=chrome_capabilities, seleniumwire_options=wire_options)
 		driver.implicitly_wait(0)
 		return driver
 
