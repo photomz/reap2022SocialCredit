@@ -28,7 +28,7 @@ from tqdm import tqdm  # Progress bar UI
 from openpyxl import load_workbook
 from datetime import datetime
 
-DEBUG = False
+DEBUG = True
 # logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
@@ -48,7 +48,7 @@ def make_new_driver():
     wire_options = {
         'disable_encoding': True
     }
-    chrome_options.add_argument("--headless")
+    if not DEBUG: chrome_options.add_argument("--headless")
     chrome_options.add_argument("--disable-infobars")
     chrome_options.add_argument("start-maximized")
     chrome_options.add_argument('window-size=1920x1480')
