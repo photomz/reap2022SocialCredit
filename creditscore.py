@@ -28,7 +28,7 @@ from tqdm import tqdm  # Progress bar UI
 from openpyxl import load_workbook
 from datetime import datetime
 
-DEBUG = True
+DEBUG = False
 # logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
@@ -38,7 +38,7 @@ BASE_PATH = os.getcwd()
 INPUT_STOCK_IDS_PATH = 'input_stock_ids.txt'
 NUM_RETRIES = 5
 HOME = expanduser("~")
-SAVE_PATH = HOME+"/Downloads/"
+SAVE_PATH = BASE_PATH
 
 
 def make_new_driver():
@@ -217,11 +217,11 @@ if __name__ == '__main__':
         for p in selenium_processes:
             p.join()
 
-        excel = load_workbook(f"{BASE_PATH}/template_headers.xlsx")
+        excel = load_workbook(f"{SAVE_PATH}/template_headers.xlsx")
         for row in excel_rows:
             excel.worksheets[0].append(row)
         now = ":".join(datetime.now().isoformat().split(":")[:-1])
-        excel.save(f"{SAVE_PATH}/ZJ_scores_{now}.xlsx")
+        excel.save(f"{BASE_PATH}/ZJ_scores_{now}.xlsx")
 
         print(f"Victory! Excel sheet saved at ZJ_scores_{now}.xlsx 🥳"+"\n\n"+str(len(unsaved_ids)) +
               " IDs were not saved. Please manually add the rest below:\n\n- "+'\n- '.join(unsaved_ids))
